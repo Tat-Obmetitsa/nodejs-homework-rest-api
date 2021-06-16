@@ -51,11 +51,70 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contact = await Contacts.removeContact(req.params.contactId)
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact
+        }
+      })
+    }
+      return res.json({
+        status: 'error',
+        code: 404,
+        mesage: 'Not found'
+      })
+  } catch (e) {
+    next(e)
+  }
+})
+router.put('/:contactId', async (req, res, next) => {
+    try {
+    const contact = await Contacts.updateContact(req.params.contactId, req.body)
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      })
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not found',
+      })
+    }
+  } catch (e) {
+    next(e)
+  }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.patch('/:contactId/vaccinated', async (req, res, next) => {
+  try {
+  const contact = await Contacts.updateContact(req.params.contactId, req.body)
+  if (contact) {
+    return res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        contact,
+      },
+    })
+  } else {
+    return res.status(404).json({
+      status: 'error',
+      code: 404,
+      data: 'Not found',
+    })
+  }
+  } catch (e) {
+    next(e)
+  }
 })
 
 module.exports = router
