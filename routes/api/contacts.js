@@ -1,6 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const Contacts = require('../../model')
+const {
+  validateAddContact,
+  validateUpdateStatusContact,
+  validateUpdateContact } = require('./validation')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -39,7 +43,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post("/", async (req, res, next) => {
+router.post("/", validateAddContact, async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
     return res
@@ -71,7 +75,7 @@ router.delete('/:contactId', async (req, res, next) => {
     next(e)
   }
 })
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validateUpdateContact, async (req, res, next) => {
     try {
     const contact = await Contacts.updateContact(req.params.contactId, req.body)
     if (contact) {
@@ -94,7 +98,7 @@ router.put('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId/vaccinated', async (req, res, next) => {
+router.patch('/:contactId/vaccinated', validateUpdateStatusContact, async (req, res, next) => {
   try {
   const contact = await Contacts.updateContact(req.params.contactId, req.body)
   if (contact) {
