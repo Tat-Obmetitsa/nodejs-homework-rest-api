@@ -1,4 +1,5 @@
-const Joi = require("joi");
+const Joi = require('joi');
+const mongoose = require('mongoose')
 
 const schemaAddContact = Joi.object({
     name: Joi.string()
@@ -7,7 +8,7 @@ const schemaAddContact = Joi.object({
         .max(10)
         .required(),
 
-    isVaccinated: Joi.boolean().optional(),
+    favorite: Joi.boolean().optional(),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'io'] } }).required(),
     phone: Joi.string().pattern(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/).required()
@@ -19,14 +20,16 @@ const schemaUpdateContact = Joi.object({
         .max(10)
         .optional(),
 
-    isVaccinated: Joi.boolean().optional(),
+    favorite: Joi.boolean().optional(),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'io'] } }).optional(),
     phone: Joi.string().pattern(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/).optional()
-}).or('name', 'isVaccinated', 'email', 'phone')
+}).or('name', 'favorite', 'email', 'phone')
 
 const schemaUpdateStatusContact = Joi.object({
-  isVaccinated: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    'any.required': "Missing 'favorite' field.",
+  }),
 });
 
 const validate = async (schema, obj, next) => {
@@ -48,5 +51,11 @@ module.exports = {
     },
     validateUpdateContact: async (req, res, next) => {
         return await validate(schemaUpdateContact, req.body, next)
+    },
+    validateMongoId: async (req, res, next) => {
+    if (!mongoose.isValidObjectId(req.params.contactId)) {
+      next({ status: 400, message: 'Invalid id'})
     }
+    next()
+  },
 }
