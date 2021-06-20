@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../../../controllers/users')
+const guard = require('../../../helpers/guard')
 
 // const {
 //   validateAddContact,
@@ -8,8 +9,8 @@ const controller = require('../../../controllers/users')
 //   validateUpdateContact,
 //   validateMongoId } = require('./validation')
 
-router.post('/register',controller.register)
+router.post('/register', controller.register)
 router.post('/login', controller.login)
-router.post('/logout',controller.logout)
+router.post('/logout', guard, controller.logout)
 
 module.exports = router
