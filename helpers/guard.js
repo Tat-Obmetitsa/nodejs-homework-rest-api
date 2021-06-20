@@ -14,7 +14,7 @@ const guard = (req, res, next) => {
         status: "error",
         code: HttpCode.UNAUTHORIZED,
         message: "Invalid credentials",
-      });
+      })
     }
     req.user = user;
     return next();
