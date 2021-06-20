@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { Subscription } = require('../helpers/constants.js')
-const bcrypt = require('bcrypt.js')
+const bcrypt = require('bcryptjs')
 const SALT_WORK_FACTOR = 8
 
 
