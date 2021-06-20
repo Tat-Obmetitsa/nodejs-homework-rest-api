@@ -42,7 +42,7 @@ const login = async (req, res, next) => {
       await Users.updateToken(id, token)
       return res.json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: {
           token,
         },

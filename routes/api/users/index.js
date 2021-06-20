@@ -3,14 +3,12 @@ const router = express.Router()
 const controller = require('../../../controllers/users')
 const guard = require('../../../helpers/guard')
 
-// const {
-//   validateAddContact,
-//   validateUpdateStatusContact,
-//   validateUpdateContact,
-//   validateMongoId } = require('./validation')
+const {
+  validateAddUser,
+  validateLoginUser } = require('./validation')
 
-router.post('/register', controller.register)
-router.post('/login', controller.login)
+router.post('/register', validateAddUser, controller.register)
+router.post('/login', validateLoginUser,  controller.login)
 router.post('/logout', guard, controller.logout)
 
 module.exports = router
