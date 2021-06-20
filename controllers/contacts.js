@@ -2,6 +2,7 @@ const Contacts = require('../repositories/contacts')
 
 const listContacts = async (req, res, next) => {
   try {
+    console.log(req.user)
     const contacts = await Contacts.listContacts()
       return res.json({
         status: 'success',
