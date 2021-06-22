@@ -19,12 +19,22 @@ app.use('/api/', rateLimit(limiterAPI));
 app.use('/api/', require('./routes/api/'))
 
 app.use((req, res) => {
-  res.status(HttpCode.NOT_FOUND).json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' })
+  res.status(HttpCode.NOT_FOUND)
+    .json({
+      status: 'error',
+      code: HttpCode.NOT_FOUND,
+      message: 'Not found'
+    })
 })
 
 app.use((err, req, res, next) => {
   const status = err.status || HttpCode.INTERNAL_SERVER_ERROR
-  res.status(status).json({ status: 'fail', code: status, message: err.message })
+  res.status(status)
+    .json({
+      status: status === HttpCode.INTERNAL_SERVER_ERROR ? 'fail' : 'error',
+      code: status,
+      message: err.message
+    })
 })
 
 process.on('unhandledRejection', (reason, promise) => {

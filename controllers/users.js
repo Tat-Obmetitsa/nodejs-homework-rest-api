@@ -14,12 +14,12 @@ const register = async (req, res, next) => {
         message: 'Email is already used'
       })
       }
-      const {id, name, email, subscription} = await Users.createUser(req.body)
+      const {id, name, email, subscription, avatar} = await Users.createUser(req.body)
 
       return res.status(HttpCode.CREATED).json({
         status: 'success',
         code: HttpCode.CREATED,
-        data: { id, name, email, subscription },
+        data: { id, name, email, subscription, avatar },
       })
   } catch (e) {
     next(e)
@@ -61,8 +61,13 @@ const logout = async (req, res, next) => {
   }
 }
 
+const avatars = async (req, res, next) => {
+  res.json({message: 'Done'})
+}
+
 module.exports = {
     register,
     login,
-    logout
+    logout,
+    avatars
 }
