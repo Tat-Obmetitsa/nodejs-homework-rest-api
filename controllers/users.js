@@ -1,9 +1,10 @@
 const Users = require('../repositories/users')
 const { HttpCode } = require('../helpers/constants')
 const fs = require('fs/promises')
-const path = require('path')
 const jwt = require('jsonwebtoken')
-const UploadAvatarService = require('../services/local-upload')
+// const path = require('path')
+// const UploadAvatarService = require('../services/local-upload')
+const UploadAvatarService = require('../services/cloud-upload')
 require('dotenv').config()
 const KEY = process.env.KEY
 
@@ -64,29 +65,54 @@ const logout = async (req, res, next) => {
   }
 }
 
+
 const avatars = async (req, res, next) => {
   try {
-    const id = req.user.id
-    const uploads = new UploadAvatarService(process.env.AVATAR)
-    const avatarURL = await uploads.saveAvatar({ id: id, file: req.file })
+    const id = req.user.id;
+    const uploads = new UploadAvatarService();
+    const { idCloudAvatar, avatarURL } = await uploads.saveAvatar(
+      req.file.path,
+      req.user.idCloudAvatar
+    );
 
-    try {
-      await fs.unlink(path.join(process.env.AVATAR, req.user.avatar))
-    } catch (error) {
-      console.log(error.message)
-    }
-    await Users.updateAvatar(id, avatarURL)
-    res.json({
-      status: 'success',
-      code: HttpCode.OK,
-      data: {
-        avatarURL
-      }
-    })
+    await fs.unlink(req.file.path);
+
+    await Users.updateAvatar(id, avatarURL, idCloudAvatar);
+    res.json({ status: "success", code: HttpCode.OK, data: { avatarURL } });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+
+
+// Local avatars' upload
+
+
+// const avatars = async (req, res, next) => {
+//   try {
+//     const id = req.user.id
+//     const uploads = new UploadAvatarService(process.env.AVATAR)
+//     const avatarURL = await uploads.saveAvatar({ id: id, file: req.file })
+
+//     try {
+//       await fs.unlink(path.join(process.env.AVATAR, req.user.avatar))
+//     } catch (error) {
+//       console.log(error.message)
+//     }
+//     await Users.updateAvatar(id, avatarURL)
+//     res.json({
+//       status: 'success',
+//       code: HttpCode.OK,
+//       data: {
+//         avatarURL
+//       }
+//     })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
+
 
 module.exports = {
     register,
