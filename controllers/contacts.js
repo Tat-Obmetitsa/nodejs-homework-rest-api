@@ -84,7 +84,8 @@ const updateContact  = async (req, res, next) => {
     const userId = req.user.id
     const contact = await Contacts.updateContact(userId, req.params.contactId, req.body)
     if (contact) {
-      return res.json({
+      return res.status(HttpCode.OK)
+        .json({
         status: 'success',
         code: HttpCode.OK,
         data: {
