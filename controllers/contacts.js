@@ -79,51 +79,40 @@ const removeContact = async (req, res, next) => {
   }
 }
 
-const updateContact  = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
-    const userId = req.user.id
-    const contact = await Contacts.updateContact(userId, req.params.contactId, req.body)
+    const userId = req.user.id;
+    const contact = await Contacts.updateContact(userId, req.params.contactId,req.body);
     if (contact) {
-      return res.status(HttpCode.OK)
-        .json({
-        status: 'success',
+      return res.status(HttpCode.OK).json({
+        status: "success",
         code: HttpCode.OK,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(HttpCode.NOT_FOUND).json({
-        status: 'error',
-        code: HttpCode.NOT_FOUND,
-        data: 'Not found',
-      })
+        data: { contact },
+      });
     }
+    return res
+      .status(HttpCode.NOT_FOUND)
+      .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
   } catch (e) {
-    next(e)
+    next(e);
   }
 }
-const updateStatusContact  = async (req, res, next) => {
-  try {
-    const userId = req.user.id
-    const contactFavorite = await Contacts.updateContact(userId, req.params.contactId, req.body)
+const updateStatusContact = async (req, res, next) => {
+    try {
+    const userId = req.user.id;
+    const contactFavorite = await Contacts.updateContact(userId, req.params.contactId,req.body);
     if (contactFavorite) {
-      return res.json({
-        status: 'success',
+      return res.status(HttpCode.OK).json({
+        status: "success",
         code: HttpCode.OK,
-        data: {
-          contactFavorite,
-        },
-      })
-    } else {
-      return res.status(HttpCode.NOT_FOUND).json({
-        status: 'error',
-        code: HttpCode.NOT_FOUND,
-        message: 'Not found',
-      })
+        data: { contactFavorite },
+      });
     }
+    return res
+      .status(HttpCode.NOT_FOUND)
+      .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
   } catch (e) {
-    next(e)
+    next(e);
   }
 }
 module.exports = {

@@ -17,18 +17,26 @@ describe('Unit test controller contacts', () => {
             return contact
         })
         const result = await updateContact(req, res, next)
+        expect(result).toBeDefined();
         expect(result.status).toEqual('success')
         expect(result.code).toEqual(200)
         expect(result.data.contact).toEqual(contact)
     })
-    // test('test update contact wrong', async () => {
-    //     Contacts.updateContact = jest.fn();
-    //     const result = await updateContact(req, res, next)
-    //     expect(result).toBeDefined();
-    //     expect(result.status).toEqual("error");
-    //     expect(result.code).toEqual(404);
-    //     expect(result.message).toEqual("Not found");
-    // })
+    test('test update contact can not exist', async () => {
+        Contacts.updateContact = jest.fn();
+        const result = await updateContact(req, res, next)
+        expect(result).toBeDefined();
+        expect(result.status).toEqual('error');
+        expect(result.code).toEqual(404);
+        expect(result.message).toEqual('Not found');
+    })
+    test('test update contact repositories return Error', async () => {
+        Contacts.updateContact = jest.fn(() => {
+            throw new Error('Error')
+        });
+        await updateContact(req, res, next)
+        expect(next).toHaveBeenCalled()
+    })
 })
 
 
