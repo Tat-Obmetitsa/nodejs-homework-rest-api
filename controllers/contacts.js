@@ -47,7 +47,7 @@ const addContact = async (req, res, next) => {
     const contact = await Contacts.addContact(userId, req.body);
     return res
       .status(HttpCode.CREATED)
-      .json({ status: "success", code: HttpCode.CREATED, data: { contact } });
+      .json({ status: 'success', code: HttpCode.CREATED, data: { contact } });
   } catch (e) {
     if (e.name === 'ValidationError') {
       e.status = HttpCode.BAD_REQUEST
@@ -85,14 +85,14 @@ const updateContact = async (req, res, next) => {
     const contact = await Contacts.updateContact(userId, req.params.contactId,req.body);
     if (contact) {
       return res.status(HttpCode.OK).json({
-        status: "success",
+        status: 'success',
         code: HttpCode.OK,
         data: { contact },
       });
     }
     return res
       .status(HttpCode.NOT_FOUND)
-      .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
+      .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
   } catch (e) {
     next(e);
   }
@@ -103,14 +103,14 @@ const updateStatusContact = async (req, res, next) => {
     const contactFavorite = await Contacts.updateContact(userId, req.params.contactId,req.body);
     if (contactFavorite) {
       return res.status(HttpCode.OK).json({
-        status: "success",
+        status: 'success',
         code: HttpCode.OK,
         data: { contactFavorite },
       });
     }
     return res
       .status(HttpCode.NOT_FOUND)
-      .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
+      .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
   } catch (e) {
     next(e);
   }

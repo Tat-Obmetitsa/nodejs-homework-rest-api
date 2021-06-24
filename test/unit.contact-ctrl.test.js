@@ -1,4 +1,3 @@
-const { expectCt } = require('helmet')
 const { updateContact } = require('../controllers/contacts')
 const Contacts = require('../repositories/contacts')
 
