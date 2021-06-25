@@ -1,5 +1,6 @@
 const { updateContact } = require('../controllers/contacts')
 const Contacts = require('../repositories/contacts')
+const { HttpCode } = require('../helpers/constants')
 
 jest.mock('../repositories/contacts')
 
@@ -18,7 +19,7 @@ describe('Unit test controller contacts', () => {
         const result = await updateContact(req, res, next)
         expect(result).toBeDefined();
         expect(result.status).toEqual('success')
-        expect(result.code).toEqual(200)
+        expect(result.code).toEqual(HttpCode.OK)
         expect(result.data.contact).toEqual(contact)
     })
     test('test update contact can not exist', async () => {
@@ -26,7 +27,7 @@ describe('Unit test controller contacts', () => {
         const result = await updateContact(req, res, next)
         expect(result).toBeDefined();
         expect(result.status).toEqual('error');
-        expect(result.code).toEqual(404);
+        expect(result.code).toEqual(HttpCode.NOT_FOUND);
         expect(result.message).toEqual('Not found');
     })
     test('test update contact repositories return Error', async () => {

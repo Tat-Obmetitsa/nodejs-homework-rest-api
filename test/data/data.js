@@ -7,13 +7,11 @@ const newContact = {
 const newUser = {
   email: "new@gmail.com",
   password: "123456789",
-  subscription: "starter",
 };
 
 const newTestUser = {
   email: "usertest@gmail.com",
   password: "123456789",
-  subscription: "starter",
 };
 
 module.exports = { newContact, newUser, newTestUser };
