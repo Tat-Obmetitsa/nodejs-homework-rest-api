@@ -2,8 +2,6 @@ const Users = require('../repositories/users')
 const { HttpCode } = require('../helpers/constants')
 const fs = require('fs/promises')
 const jwt = require('jsonwebtoken')
-// const path = require('path')
-// const UploadAvatarService = require('../services/local-upload')
 const UploadAvatarService = require('../services/cloud-upload')
 require('dotenv').config()
 const KEY = process.env.KEY
@@ -18,7 +16,7 @@ const register = async (req, res, next) => {
         message: 'Email is already used'
       })
       }
-      const {id, name, email, subscription, avatar} = await Users.createUser(req.body)
+      const {id, name, email, subscription, avatar, verifyToken} = await Users.createUser(req.body)
 
       return res.status(HttpCode.CREATED).json({
         status: 'success',
@@ -33,7 +31,7 @@ const login = async (req, res, next) => {
   try {
       const user = await Users.findByEmail(req.body.email)
       const isValidPassword = await user?.isValidPassword(req.body.password)
-      if (!user || !isValidPassword) {
+      if (!user || !isValidPassword || !user.isVerified) {
         return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'error',
         code: HttpCode.CONFLICT,
