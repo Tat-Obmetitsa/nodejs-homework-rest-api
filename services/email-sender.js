@@ -24,7 +24,6 @@ class CreateSenderNodeMailer {
   }
 }
     
-    
 module.exports = {
     CreateSenderSendGrid,
     CreateSenderNodeMailer
