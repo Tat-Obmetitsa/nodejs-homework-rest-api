@@ -13,4 +13,7 @@ router.post('/login', validateLoginUser,  controller.login)
 router.post('/logout', guard, controller.logout)
 router.patch('/avatars', guard, upload.single('avatar'), controller.avatars)
 
+router.get('/verify/:token', controller.verify);
+router.post('/verify', controller.repeatEmailVerification);
+
 module.exports = router

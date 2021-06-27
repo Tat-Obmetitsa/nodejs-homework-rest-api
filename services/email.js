@@ -6,19 +6,20 @@ class EmailService {
         this.sender = sender
         switch (env) {
             case 'development':
-                this.link = 'https://localhost:8443'
+                this.link = 'https://localhost:3000'
                 break
             case 'production':
                 this.link = 'link for production'
                 break
             default:
-                this.link = 'https://localhost:8443'
+                this.link = 'https://localhost:3000'
                 break
         }
     }
+    // 'https://bba7a084e887.ngrok.io'
     #createTemplateVerificationEmail(verifyToken, name) {
         const mailGenerator = new Mailgen({
-            theme: 'testmail',
+            theme: 'default',
             product: {
                 name: 'Trinka',
                 link: this.link
@@ -36,10 +37,9 @@ class EmailService {
                     link: `${this.link}/api/users/verify/${verifyToken}`
                 }
             },
-        outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
     }
         }
-       return emailBody = mailGenerator.generate(email);
+       return mailGenerator.generate(email);
     }
     async sendVerifyEmail(verifyToken, email, name) {
         const emailHtml = this.#createTemplateVerificationEmail(verifyToken, name)
