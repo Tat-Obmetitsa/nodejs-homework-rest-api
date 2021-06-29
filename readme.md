@@ -1,4 +1,4 @@
-## GoIT Node.js Course Homework
+## GoIT Node.js Rest API
 
 ### Команды:
 
